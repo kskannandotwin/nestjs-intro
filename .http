@@ -1,2 +1,5 @@
 # the basic request to localhost
 http://localhost:3000
+
+# the request to tasks endpoint
+GET http://localhost:3000/tasks
