@@ -20,3 +20,12 @@ Content-Type: {{contentType}}
   "description": "Complete the NestJS Course.",
   "status": "OPEN"
 }
+
+### Validation error - status is invalid
+POST {{baseUrl}}/tasks
+Content-Type: {{contentType}}
+
+{  
+  "description": "Complete the NestJS Course.",
+  "status": "XXX"
+}
