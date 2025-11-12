@@ -5,12 +5,14 @@ import {
   Get,
   NotFoundException,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import type { ITask } from './task.model';
 import { CreateTaskDto } from './create-task.dto';
 import { FindOneParams } from './find-one-params';
+import { UpdateTaskStatusDto } from './update-task-status.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -23,17 +25,30 @@ export class TasksController {
 
   @Get('/:id')
   public findOne(@Param() params: FindOneParams): ITask {
-    const task = this.tasksService.findOne(params.id);
-
-    if (task) {
-      return task;
-    }
-
-    throw new NotFoundException();
+    return this.findOneorFail(params.id);
   }
 
   @Post()
   public create(@Body() creatTaskDto: CreateTaskDto) {
     return this.tasksService.create(creatTaskDto);
+  }
+
+  @Patch('/:id/status')
+  public updateTaskStatus(
+    @Param() params: FindOneParams,
+    @Body() body: UpdateTaskStatusDto,
+  ): ITask {
+    const task = this.findOneorFail(params.id);
+    task.status = body.status;
+    return task;
+  }
+
+  private findOneorFail(id: string): ITask {
+    const task = this.tasksService.findOne(id);
+
+    if (!task) {
+      throw new NotFoundException();
+    }
+    return task;
   }
 }
