@@ -9,9 +9,11 @@ GET {{baseUrl}}
 GET {{baseUrl}}/tasks
 
 ### Get a specific task
-GET {{baseUrl}}/tasks/123
+GET {{baseUrl}}/tasks/{{taskId}}
 
 ### Create a new task
+
+# @name createTask
 POST {{baseUrl}}/tasks
 Content-Type: {{contentType}}
 
@@ -20,6 +22,10 @@ Content-Type: {{contentType}}
   "description": "Complete the NestJS Course.",
   "status": "OPEN"
 }
+
+### set the task id
+
+@taskId = {{ createTask.response.body.id }}
 
 ### Validation error - status is invalid
 POST {{baseUrl}}/tasks
@@ -30,16 +36,15 @@ Content-Type: {{contentType}}
   "status": "XXX"
 }
 
-# cccaa619-3b27-497f-8151-0b130be5127f
 
 ### Update task status
-PATCH {{baseUrl}}/tasks/cccaa619-3b27-497f-8151-0b130be5127f/status
+PATCH {{baseUrl}}/tasks/{{taskId}}
 Content-Type: {{contentType}}
 
 {  
-  "status": "DONE"
+  "status": "IN_PROGRESS"
 }
 
 ### Delete a task
-DELETE {{baseUrl}}/tasks/1bbb94a4-62ff-4adc-9c40-9069a8122ce4
+DELETE {{baseUrl}}/tasks/{{taskId}}
 Content-Type: {{contentType}}
