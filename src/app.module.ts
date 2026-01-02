@@ -10,12 +10,13 @@ import { appConfig } from './config/app.config';
 import { appConfigSchema } from './config/config.types';
 import { typeOrmConfig } from './config/database.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypedConfigService } from './config/typed-config.service';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (configService: TypedConfigService) => ({
         ...configService.get<TypeOrmModuleOptions>('database'),
       }),
     }),
@@ -30,6 +31,15 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
     TasksModule,
   ],
   controllers: [AppController],
-  providers: [AppService, DummyService, MessageFormatterService, LoggerService],
+  providers: [
+    AppService,
+    DummyService,
+    MessageFormatterService,
+    LoggerService,
+    {
+      provide: TypedConfigService,
+      useExisting: ConfigService,
+    },
+  ],
 })
 export class AppModule {}
